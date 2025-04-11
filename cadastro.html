@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário | Sistema</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="shortcut icon" href="./homer.png" />
+    <style>
+        :root {
+            --primary-color: #0d6efd; /* Azul do Bootstrap */
+            --primary-hover: #0b5ed7;
+            --secondary-color: #f8f9fa;
+            --dark-color: #212529;
+            --light-gray: #e9ecef;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: none;
+            margin-top: 2rem;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+        
+        .form-control {
+            padding: 12px 15px 12px 45px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 12px 28px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        
+        .input-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        
+        .brand-text {
+            line-height: 1.2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header text-white">
+                        <div class="brand-container">
+                            <img src="./homer.png" alt="Logo" class="brand-logo">
+                            <div class="brand-text">
+                                <h2 class="h4 mb-0">Cadastro de Usuário</h2>
+                                <small class="opacity-75">Crie uma nova conta no sistema</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="frmCadastro">
+                            <!-- Campo Nome -->
+                            <div class="input-container">
+                                <label for="txtNome" class="form-label">Nome Completo</label>
+                                <div class="position-relative">
+                                    <i class="bi bi-person input-icon"></i>
+                                    <input type="text" class="form-control" id="txtNome" placeholder="Digite seu nome completo" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Campo Login -->
+                            <div class="input-container">
+                                <label for="txtLogin" class="form-label">Login de Acesso</label>
+                                <div class="position-relative">
+                                    <i class="bi bi-person-badge input-icon"></i>
+                                    <input type="text" class="form-control" id="txtLogin" placeholder="Crie um nome de usuário" required>
+                                </div>
+                                <small class="text-muted">Mínimo 4 caracteres alfanuméricos</small>
+                            </div>
+                            
+                            <!-- Campo Senha -->
+                            <div class="input-container">
+                                <label for="txtSenha" class="form-label">Senha</label>
+                                <div class="position-relative">
+                                    <i class="bi bi-shield-lock input-icon"></i>
+                                    <input type="password" class="form-control" id="txtSenha" placeholder="Crie uma senha segura" required>
+                                    <i class="bi bi-eye password-toggle" id="toggleSenha"></i>
+                                </div>
+                                <small class="text-muted">Use letras, números e caracteres especiais</small>
+                            </div>
+                            
+                            <div class="d-grid pt-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-person-plus me-2"></i>Cadastrar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./cadastro.js"></script>
+    <script>
+        // Alternar visibilidade da senha
+        document.getElementById('toggleSenha').addEventListener('click', function() {
+            const senhaInput = document.getElementById('txtSenha');
+            const tipo = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            senhaInput.setAttribute('type', tipo);
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
+        });
+    </script>
+</body>
+
+</html>

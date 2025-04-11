@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #f9fafb;
+            --success: #10b981;
+            --error: #ef4444;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg: #8e85e2;
+            --border: #e5e7eb;
+            --radius: 0.75rem;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .container {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9375rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9375rem;
+            transition: var(--transition);
+            background-color: var(--secondary);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            background-color: white;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary);
+            border-color: var(--primary);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            font-size: 0.9375rem;
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .message i {
+            font-size: 1.25rem;
+        }
+
+        .success {
+            background-color: #ecfdf5;
+            color: var(--success);
+            border: 1px solid #a7f3d0;
+        }
+
+        .error {
+            background-color: #fef2f2;
+            color: var(--error);
+            border: 1px solid #fecaca;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9375rem;
+            color: var(--text-light);
+        }
+
+        .auth-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-user-shield"></i> Acesso ao Sistema</h1>
+        
+        <div id="message" class="message">
+            <i id="message-icon"></i>
+            <span id="message-text"></span>
+        </div>
+        
+        <!-- Formulário de Login -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" id="login" placeholder="Digite seu usuário" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <div class="password-container">
+                    <input type="password" id="senha" placeholder="Digite sua senha" required>
+                    <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i> Entrar
+            </button>
+        </form>
+        
+        <!-- Formulário de Cadastro (inicialmente oculto) -->
+        <form id="registerForm" class="hidden">
+            <div class="form-group">
+                <label for="regNome">Nome Completo</label>
+                <input type="text" id="regNome" placeholder="Seu nome completo" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="regLogin">Login</label>
+                <input type="text" id="regLogin" placeholder="Escolha um nome de usuário" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="regSenha">Senha</label>
+                <div class="password-container">
+                    <input type="password" id="regSenha" placeholder="Crie uma senha segura" required>
+                    <i class="fas fa-eye toggle-password" id="toggleRegPassword"></i>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="regConfSenha">Confirmar Senha</label>
+                <div class="password-container">
+                    <input type="password" id="regConfSenha" placeholder="Repita sua senha" required>
+                    <i class="fas fa-eye toggle-password" id="toggleRegConfPassword"></i>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" id="registerBtn">
+                <i class="fas fa-user-plus"></i> Cadastrar
+            </button>
+        </form>
+        
+        <div class="auth-switch">
+            <span id="switchText">Não tem uma conta?</span>
+            <a class="auth-link" id="switchAuth">Cadastre-se</a>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn btn-secondary" onclick="loadOperation('leitura')">
+                <i class="fas fa-book-open"></i> Consultar Dados
+            </button>
+            <button class="btn btn-secondary" onclick="loadOperation('atualizacao')">
+                <i class="fas fa-edit"></i> Atualizar Dados
+            </button>
+            <button class="btn btn-secondary" onclick="loadOperation('remocao')">
+                <i class="fas fa-user-times"></i> Remover Conta
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Elementos do DOM
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const switchAuth = document.getElementById('switchAuth');
+        const switchText = document.getElementById('switchText');
+        const messageDiv = document.getElementById('message');
+        const messageIcon = document.getElementById('message-icon');
+        const messageText = document.getElementById('message-text');
+        
+        // Alternar entre login e cadastro
+        let isLogin = true;
+        
+        switchAuth.addEventListener('click', () => {
+            isLogin = !isLogin;
+            
+            if (isLogin) {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                switchText.textContent = 'Não tem uma conta?';
+                switchAuth.textContent = 'Cadastre-se';
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                switchText.textContent = 'Já tem uma conta?';
+                switchAuth.textContent = 'Faça login';
+            }
+        });
+        
+        // Toggle para mostrar/ocultar senha
+        document.querySelectorAll('.toggle-password').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        });
+        
+        // Submissão do formulário de login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+            
+            const login = document.getElementById('login').value;
+            const senha = document.getElementById('senha').value;
+            
+            try {
+                const response = await fetch('/api/mysql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        login, 
+                        senha, 
+                        tipo: 'login' 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage(data.message, 'success', 'fa-check-circle');
+                    // Redirecionar após login bem-sucedido
+                    setTimeout(() => {
+                        window.location.href = './leitura.html';
+                    }, 1500);
+                } else {
+                    throw new Error(data.message || 'Erro ao fazer login');
+                }
+            } catch (err) {
+                showMessage(err.message, 'error', 'fa-exclamation-circle');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+            }
+        });
+        
+        // Submissão do formulário de cadastro
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const registerBtn = document.getElementById('registerBtn');
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
+            
+            const nome = document.getElementById('regNome').value;
+            const login = document.getElementById('regLogin').value;
+            const senha = document.getElementById('regSenha').value;
+            const confSenha = document.getElementById('regConfSenha').value;
+            
+            // Validação básica
+            if (senha !== confSenha) {
+                showMessage('As senhas não coincidem', 'error', 'fa-exclamation-circle');
+                registerBtn.disabled = false;
+                registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Cadastrar';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/mysql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        nome, 
+                        login, 
+                        senha, 
+                        tipo: 'cadastro' 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage('Cadastro realizado com sucesso! Faça login para continuar.', 'success', 'fa-check-circle');
+                    // Voltar para o formulário de login após cadastro
+                    setTimeout(() => {
+                        isLogin = true;
+                        loginForm.classList.remove('hidden');
+                        registerForm.classList.add('hidden');
+                        switchText.textContent = 'Não tem uma conta?';
+                        switchAuth.textContent = 'Cadastre-se';
+                        registerBtn.disabled = false;
+                        registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Cadastrar';
+                    }, 2000);
+                } else {
+                    throw new Error(data.message || 'Erro ao cadastrar');
+                }
+            } catch (err) {
+                showMessage(err.message, 'error', 'fa-exclamation-circle');
+                registerBtn.disabled = false;
+                registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Cadastrar';
+            }
+        });
+        
+        // Mostrar mensagens
+        function showMessage(text, type, icon) {
+            messageDiv.className = `message ${type}`;
+            messageIcon.className = `fas ${icon}`;
+            messageText.textContent = text;
+            messageDiv.style.display = 'flex';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Carregar outras operações
+        function loadOperation(operation) {
+            window.location.href = `./${operation}.html`;
+        }
+    </script>
+</body>
+</html>

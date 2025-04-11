@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Usuários</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #8b5cf6;
+            --primary-lighter: #c4b5fd;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --radius: 14px;
+            --shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+            --shadow-hover: 0 8px 30px rgba(124, 58, 237, 0.12);
+            --error: #ef4444;
+            --success: #10b981;
+            --glass: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ede9fe 0%, #f3e8ff 100%);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 460px;
+            width: 100%;
+            animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2.25rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        }
+
+        h1 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-bottom: 1.75rem;
+            color: var(--primary);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 3px;
+            opacity: 0.5;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.625rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: 0.3px;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.6875rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--text);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+            background-color: white;
+        }
+
+        .user-info {
+            margin-top: 1.75rem;
+            border-top: 1px dashed rgba(124, 58, 237, 0.2);
+            padding-top: 1.5rem;
+            display: none;
+            animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-item {
+            margin-bottom: 1.375rem;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-label i {
+            color: var(--primary);
+            font-size: 0.6875rem;
+        }
+
+        .info-value {
+            font-size: 0.875rem;
+            padding: 0.6875rem 1rem;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: var(--radius);
+            word-break: break-all;
+            border: 1px solid var(--border);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            font-size: 0.8125rem;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0.25rem;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            display: none;
+            padding: 0.75rem;
+            background-color: rgba(239, 68, 68, 0.05);
+            border-radius: var(--radius);
+            border-left: 3px solid var(--error);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-3px); }
+            40%, 80% { transform: translateX(3px); }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(124, 58, 237, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            color: var(--success);
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            display: none;
+            padding: 0.75rem;
+            background-color: rgba(16, 185, 129, 0.05);
+            border-radius: var(--radius);
+            border-left: 3px solid var(--success);
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .card {
+                padding: 1.75rem;
+            }
+            
+            h1 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1><i class="fas fa-user-shield"></i> Consulta de Usuário</h1>
+            
+            <div class="form-group">
+                <label for="inputNome">NOME DO USUÁRIO</label>
+                <input type="text" id="inputNome" placeholder="Digite parte do nome...">
+                <div class="error-message" id="errorMessage"></div>
+                <div class="success-message" id="successMessage"></div>
+            </div>
+            
+            <div class="user-info" id="userInfo">
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-user-tag"></i> NOME COMPLETO</div>
+                    <div class="info-value" id="infoNome"></div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-user-circle"></i> LOGIN</div>
+                    <div class="info-value" id="infoLogin"></div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label"><i class="fas fa-lock"></i> SENHA</div>
+                    <div class="password-container">
+                        <div class="info-value" id="infoSenha"></div>
+                        <button class="toggle-password" id="togglePassword" aria-label="Mostrar/ocultar senha">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputNome = document.getElementById('inputNome');
+            const userInfo = document.getElementById('userInfo');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const togglePassword = document.getElementById('togglePassword');
+            let currentTimeout = null;
+            let actualPassword = '';
+            let isPasswordVisible = false;
+            
+            togglePassword.addEventListener('click', function() {
+                const senhaField = document.getElementById('infoSenha');
+                isPasswordVisible = !isPasswordVisible;
+                
+                if (isPasswordVisible) {
+                    senhaField.textContent = actualPassword;
+                    this.innerHTML = '<i class="fas fa-eye"></i>';
+                } else {
+                    senhaField.textContent = '••••••••';
+                    this.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                }
+            });
+            
+            inputNome.addEventListener('input', function() {
+                const nome = this.value.trim();
+                
+                if (currentTimeout) {
+                    clearTimeout(currentTimeout);
+                }
+                
+                userInfo.style.display = 'none';
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+                
+                if (nome.length >= 2) {
+                    errorMessage.innerHTML = '<span class="loading"></span> Buscando usuário...';
+                    errorMessage.style.display = 'block';
+                    errorMessage.style.color = 'var(--text)';
+                    
+                    currentTimeout = setTimeout(() => {
+                        buscarUsuario(nome);
+                    }, 400);
+                }
+            });
+            
+            async function buscarUsuario(nome) {
+                try {
+                    const response = await fetch('/api/buscar-usuario', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            campo: 'nome',
+                            valor: nome
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Erro na busca');
+                    }
+                    
+                    if (data.success && data.usuarios && data.usuarios.length > 0) {
+                        const usuario = data.usuarios[0];
+                        exibirUsuario(usuario);
+                        
+                        successMessage.textContent = 'Usuário encontrado com sucesso!';
+                        successMessage.style.display = 'block';
+                    } else {
+                        throw new Error('Nenhum usuário encontrado');
+                    }
+                } catch (error) {
+                    errorMessage.textContent = error.message;
+                    errorMessage.style.color = 'var(--error)';
+                    errorMessage.style.display = 'block';
+                    userInfo.style.display = 'none';
+                    successMessage.style.display = 'none';
+                }
+            }
+            
+            function exibirUsuario(usuario) {
+                document.getElementById('infoNome').textContent = usuario.nome || 'Não informado';
+                document.getElementById('infoLogin').textContent = usuario.login || 'Não informado';
+                actualPassword = usuario.senha || '';
+                
+                document.getElementById('infoSenha').textContent = actualPassword;
+                togglePassword.innerHTML = '<i class="fas fa-eye"></i>';
+                isPasswordVisible = true;
+                
+                userInfo.style.display = 'block';
+                errorMessage.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
